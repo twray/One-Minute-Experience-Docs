@@ -65,6 +65,8 @@ Now that we have created our training resource, we will now follow the exact sam
 
 5. Under the 'Pricing Tier' dropdown, select `F0`. This is the free pricing tier.
 
+By now you should habe both a *training resource* and a *prediction resource* set up. Your screen should appear as follows:
+
 ![CustomVision Resources Screen, with Training and Prediction Resources](./img/resources-created.png)
 
 Click on each box to view more information about each resource. You'll notice that both of our training and prediction resources have a set of keys associated with them. Namely, each resource has a **Key**, **Endpoint** and **Resource Id**.
