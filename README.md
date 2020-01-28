@@ -35,7 +35,7 @@ In the following steps. We will set up a free CustomVision account, and create a
 
 ![CustomVision Blank Project Screen](./img/projects-none.png)
 
-### Create our CustomVision Resources, Projects and API keys
+### Create our CustomVision Resources
 
 Once you have set up a CustomVision account, you would need to create your *resources*.
 
@@ -96,6 +96,8 @@ PREDICTION_RESOURCE_ID=[your-prediction-resource-id]
 Save your `keys.txt` file.
 
 We now have our training and prediction resources ready, and we also have the necessary keys to connect One Minute to these resources. The final step is to now create a *project*.
+
+### Create our CustomVision Project
 
 Within the context of CustomVision, a *project* represents a single image prediction model, with its own set of images. In essence, a CustomVision project is where the images are actually stored. If you are a large organisation with multiple collections, you would typically setup one project per collection.
 
