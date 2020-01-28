@@ -33,7 +33,7 @@ In the following steps. We will set up a free CustomVision account, and create a
 
 4. If you were prompted to create an Azure account, go back to [Microsoft CustomVision home page](https://www.customvision.ai/) and click on the 'Sign In' link if it is still present. At this point, you should see a blank 'Projects' screen.
 
-![CustomVision Blank Project Screen](./img/first-project.png)
+![CustomVision Blank Project Screen](./img/projects-none.png)
 
 ### Create our CustomVision Resources, Projects and API keys
 
