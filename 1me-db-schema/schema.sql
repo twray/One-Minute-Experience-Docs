@@ -9,7 +9,7 @@ CREATE TABLE `artwork` (
   `artist_name` varchar(200) DEFAULT NULL,
   `artist_nationality` varchar(200) DEFAULT NULL,
   `story_segment_1` varchar(160) DEFAULT NULL COMMENT 'Begin storytelling by describing the immediately noticeable element(s) in the artwork. This being, what the viewer can see, simply with her eyes.',
-  `story_segment_2` varchar(160) DEFAULT NULL COMMENT 'Evoke curiosity with a statement and  (if you wish) a question that leads up to the main interpretive content (the plot).',
+  `story_segment_2` varchar(160) DEFAULT NULL COMMENT 'Evoke curiosity with a statement and (if you wish) a question that leads up to the main interpretive content (the plot).',
   `story_segment_3` varchar(160) DEFAULT NULL COMMENT 'Explain and enlighten the reader with the plot of the story. Break the story up on two sections.',
   `story_segment_4` varchar(160) DEFAULT NULL COMMENT 'Explain and enlighten the reader with the plot of the story. Break the story into two sections.',
   `story_segment_5` varchar(160) DEFAULT NULL COMMENT 'Round up the story, leaving the reader with a curious mind, perhaps wanting more.',
@@ -20,6 +20,7 @@ CREATE TABLE `artwork` (
   `notes` text COMMENT 'Any useful notes about this object.',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=478 DEFAULT CHARSET=latin1
+;
 
 CREATE TABLE `event_log` (
   `id` int(15) unsigned NOT NULL AUTO_INCREMENT,
@@ -30,3 +31,4 @@ CREATE TABLE `event_log` (
   `created_on` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3552 DEFAULT CHARSET=utf8mb4
+;

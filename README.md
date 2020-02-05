@@ -150,3 +150,49 @@ PROJECT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx3833
 ```
 
 Note that in the above sample, some of the keys and IDs are blanked out. This is intentional - your `keys.txt` file will look different. If your `keys.txt` resembles the above sample, then you are ready to move on to the next step.
+
+## Set Up the Directus CMS and Install the One Minute Extension
+
+Once the CustomVision account is set up, we can now install the Directus CMS. The CMS is responsible for storing the stories, image files and other pieces of metadata for One Minute. It also provides a way for us create and manage user accounts for the One Minute Story Editor.
+
+The [Directus CMS](https://directus.io/) is described as a [headless CMS](https://en.wikipedia.org/wiki/Headless_content_management_system). It wraps SQL databases with an easy-to-use administration interface, and provides a convenient API for accessing and modifying its data. When stories are added and edited using the Story Editor, they are stored within this CMS. The CMS also communicates with the CustomVision API so that there is link between the images stored within CustomVision and the artworks stored within the CMS.
+
+The Directus CMS wraps a MySQL database: both of which are installed on a server. This part of the set up process assumes that you have access to a server with MySQL and PHP installed.
+
+### Technical Requirements
+
+Before you continue, we'll need to make sure that:
+
+- You have access to access to a Web Server with MySQL installed. The common [LAMP](https://en.wikipedia.org/wiki/LAMP_(software_bundle)) installation should be sufficient. You can [view more information about the requirements here](https://docs.directus.io/installation/git.html#step-1-make-sure-requirements-are-met).
+
+- That you have sufficient access privileges on the server to:
+
+  - Create and manage MySQL databases. For this, you would need a MySQL username and password.
+
+  - Clone and/or add new folders and files into a server's `/var/www` or `/public_html` (or similar) folders. The Directus API, which is used by the One Minute Story Editor and Visitor App to communicate with the CMS, resides here.
+
+Please note that it is beyond the scope of this guide to discuss server permissions or administration. For help on this matter, please contact your support personnel.
+
+## Set Up the MySQL database and Schema
+
+The first thing we'll do is set up our MySQL database and load the One Minute schema. On your server, log into MySQL via the following command:
+
+```
+mysql -u [your-mysql-username] -p
+```
+
+Of course, replace `[your-mysql-username]` with your MySQL username. You will then be prompted to enter your password. Once logged in, you should see a prompt that looks like this:
+
+```
+mysql>
+```
+
+First, create your database. In this example, the name of the database is `1me`. After you have created your database, exit the MySQL command line.
+
+```
+
+mysql> create database 1me;
+
+mysql> exit
+
+```
