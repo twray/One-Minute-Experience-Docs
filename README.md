@@ -238,3 +238,96 @@ As you can see, the core data schema for One Minute is very simple. It consists 
 - An `event_log` table, which logs session data and events from the One Minute Visitor app, such as the artworks that were read, and how long each visitor spent reading them.
 
 Once you have loaded the schema, you are ready to move on to the next step, which is to install the Directus CMS 'on top' of the database.
+
+### Installing the Directus CMS
+
+The following is a brief walkthrough on how to install Directus on your own server. You can also follow [their own set up guide here](https://docs.directus.io/installation/git.html).
+
+First, create and navigate to a public URL which will host our Directus installation.
+
+```
+
+mkdir /var/www/1me
+
+cd /var/www/1me
+
+```
+
+Then, clone the [Directus repository](https://github.com/directus/directus) directly into this directory.
+
+```
+git clone https://github.com/directus/directus.git .
+```
+
+Enable the Apache `mod_rewrite` functionality:
+
+```
+a2enmod rewrite
+```
+
+We'll also need to configure Apache to point to and enable the Directus installation. Navigate to your Apache folder, which in most server configurations is `/etc/apache2`:
+
+```
+cd /etc/apache2
+```
+
+Navigate to the `sites-available` folder, and create a new file called `1me.conf`. Open this file in your favourite editor (which in this case, is `nano`).
+
+```
+
+cd sites-available
+
+touch 1me.conf
+
+nano 1me.conf
+
+```
+
+Add the following to the `1me.conf` file:
+
+```
+
+Alias "/1me" "/var/www/1me/public"
+
+<Directory /var/www/1me/public>
+        Require all granted
+        AllowOverride All
+</Directory>
+
+```
+
+Now `cd` back into the `sites-enabled` directory, and create a symlink to the `1me.conf` file in your `sites-available` directory.
+
+```
+
+cd ../sites-enabled/
+
+ln -s ../sites-available/1me.conf ./1me.conf
+
+```
+
+Once done, restart the Apache server.
+
+```
+apache2ctl restart
+```
+
+Then navigate back to the directory where you have installed Directus, and change the ownership of that directory so that it's owned by `www-data`. This enables Directus to be able to access and write files within that directory.
+
+```
+
+cd /var/www/1me
+
+sudo chown -R www-data:www-data .
+
+```
+
+With the server configuration of the way, you can navigate to your Web browser, pointing the URL to the server and its path as defined in your Apache configuration.
+
+```
+http://[your-server-here]/1me/
+```
+
+If all is successful, it should direct you to the Directus installation screen.
+
+![The Initial Directus Installation Screen](./img/directus-setup-screen.png)
