@@ -173,7 +173,7 @@ Before you continue, we'll need to make sure that:
 
 Please note that it is beyond the scope of this guide to discuss server permissions or administration. For help on this matter, please contact your support personnel.
 
-## Set Up the MySQL Database and Schema
+### Set Up the MySQL Database and Schema
 
 The first thing we'll do is set up our MySQL database and load the One Minute schema. On your server, log into MySQL via the following command:
 
