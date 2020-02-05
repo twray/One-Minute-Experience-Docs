@@ -173,7 +173,7 @@ Before you continue, we'll need to make sure that:
 
 Please note that it is beyond the scope of this guide to discuss server permissions or administration. For help on this matter, please contact your support personnel.
 
-## Set Up the MySQL database and Schema
+## Set Up the MySQL Database and Schema
 
 The first thing we'll do is set up our MySQL database and load the One Minute schema. On your server, log into MySQL via the following command:
 
@@ -196,3 +196,45 @@ mysql> create database 1me;
 mysql> exit
 
 ```
+
+Once you have exited MySQL, clone [this repository](https://github.com/twray/One-Minute-Experience-Docs), and `cd` into the `1me-db-schema` directory.
+
+```
+
+git clone https://github.com/twray/One-Minute-Experience-Docs.git .
+
+cd 1me-db-schema
+
+```
+
+Now run the following command which will import the One Minute schema into the database you have just created.
+
+```
+mysql 1me -u [your-mysql-username] -p < schema.sql
+```
+
+After entering your password, MySQL should import the schema. We can verify the schema by again logging into MySQL and running the `show tables` command:
+
+```
+
+mysql -u [your-mysql-username] -p
+
+mysql> show tables;
+
++---------------+
+| Tables_in_1me |
++---------------+
+| artwork       |
+| event_log     |
++---------------+
+2 rows in set (0.00 sec)
+
+```
+
+As you can see, the core data schema for One Minute is very simple. It consists of:
+
+- The `artwork` table, which contains the stories about the artworks.
+
+- An `event_log` table, which logs session data and events from the One Minute Visitor app, such as the artworks that were read, and how long each visitor spent reading them.
+
+Once you have loaded the schema, you are ready to move on to the next step, which is to install the Directus CMS 'on top' of the database.
