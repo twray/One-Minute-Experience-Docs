@@ -187,14 +187,36 @@ Of course, replace `[your-mysql-username]` with your MySQL username. You will th
 mysql>
 ```
 
-First, create your database. In this example, the name of the database is `1me`. After you have created your database, exit the MySQL command line.
+First, create your database. In this example, the name of the database is `1me`.
+
+```
+mysql> CREATE DATABASE 1me;
+```
+
+You may also want to create a separate MySQL with privileges granted only to that database. We can also do that here.
 
 ```
 
-mysql> create database 1me;
+mysql> CREATE USER '1me'@'localhost' IDENTIFIED BY '[your-password-here]';
 
+mysql> GRANT ALL PRIVILEGES ON 1me . * TO '1me'@'localhost';
+
+mysql> FLUSH PRIVILEGES;
+
+```
+
+Of course, in the above example, replace `[your-password-here]` with your own, secure password. Make sure you note down the following - you would need this in the following steps:
+
+- The database name, which is `1me`.
+
+- The database user, which is also `1me`.
+
+- The password you have just created for the `1me` user.
+
+Once you have created your database user and noted down this information, exit MySQL.
+
+```
 mysql> exit
-
 ```
 
 Once you have exited MySQL, clone [this repository](https://github.com/twray/One-Minute-Experience-Docs), and `cd` into the `1me-db-schema` directory.
@@ -210,23 +232,23 @@ cd 1me-db-schema
 Now run the following command which will import the One Minute schema into the database you have just created.
 
 ```
-mysql 1me -u [your-mysql-username] -p < schema.sql
+mysql 1me -u 1me -p < schema.sql
 ```
 
 After entering your password, MySQL should import the schema. We can verify the schema by again logging into MySQL and running the `show tables` command:
 
 ```
 
-mysql -u [your-mysql-username] -p
+mysql 1me -u 1me -p
 
 mysql> show tables;
 
-+---------------+
-| Tables_in_1me |
-+---------------+
-| artwork       |
-| event_log     |
-+---------------+
++----------------+
+| Tables_in_1me  |
++----------------+
+| artwork        |
+| event_log      |
++----------------+
 2 rows in set (0.00 sec)
 
 ```
@@ -331,3 +353,45 @@ http://[your-server-here]/1me/
 If all is successful, it should direct you to the Directus installation screen.
 
 ![The Initial Directus Installation Screen](./img/directus-setup-screen.png)
+
+Follow the prompts until you create the *Create Project* screen. Here, you would need to enter a *Project Name* (such as `One Minute`, although you could use any other name you would like). The *Project Key* will automatically populate. Enter your e-mail address and a password that you will use to log into the Directus CMS as an administrator. Note that this is different from your MySQL username and password.
+
+![The Directus Create Project Screen](./img/directus-create-project-screen.png)
+
+On the next screen, you will need to enter your database details as noted before:
+
+- The database user (which is `1me` in this example).
+
+- The password you have created for this database user when you have set up the MySQL database.
+
+- The database name (which is also `1me` in this example).
+
+![The Directus Database Details Screen](./img/directus-database-details-screen.png)
+
+Once you have entered these details, you will be presented with another screen that will confirm the installation, and provide you with a "super admin" password. Make sure you keep this password in a safe place.
+
+From this point onwards, you will be directed to the Directus sign-in screen.
+
+![The Directus Sign In Screen](./img/directus-sign-in-screen.png)
+
+Log in with your *Directus Username and Password*. Once logged in, click on the gear icon which will take you to the *Admin Settings* screen, then click on *Collections & Fields*.
+
+![The Directus Collections & Fields Screen](./img/directus-collections-and-fields.png)
+
+We will need to configure the `artwork` and `event_log` collections. First, click on the `artwork` collection. You will need to modify the fields as follows:
+
+- Within the `status` field, click on *Manage*. Then click on the field itself. Within the *Interface* tab, set its interface to *Status*.
+
+- Within the `created_by` field, click on *Manage*. Then click on the field itself. Within the *Interface* tab, set its interface to *Owner*.
+
+- Within the `created_on` field, click on *Manage*. Then click on the field itself. Within the *Interface* tab, set its interface to *Datetime Created*.
+
+- Within the `modified_by` field, click on *Manage*. Then click on the field itself. Within the *Interface* tab, set its interface to *User Updated*.
+
+- Within the `modified_on` field, click on *Manage*. Then click on the field itself. Within the *Interface* tab, set its interface to *Datetime Updated*.
+
+- Within the `image` field, click on *Manage*. Then click on the field itself. Within the *Interface* tab, set its interface to *File*.
+
+![An Empty List of Artworks in Directus](./img/directus-empty-artworks-add-new.png)
+
+// TODO: Setup Directus Thumbnailing
