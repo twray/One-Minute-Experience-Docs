@@ -392,7 +392,7 @@ You will need to set the interface types for the following fields on the `artwor
 | `modified_by` | *User Updated*     |
 | `modified_on` | *DateTime Updated* |
 | `image`       | *File*             |
-| `switch`      | *Switch*           I
+| `is_example`  | *Switch*           |
 
 Once you are done, the *Fields Screen* for the `artwork` collection should look something like this:
 
