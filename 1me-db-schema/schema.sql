@@ -32,3 +32,11 @@ CREATE TABLE `event_log` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3552 DEFAULT CHARSET=utf8mb4
 ;
+
+CREATE TABLE `artwork_photos` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `artwork_id` int(10) unsigned DEFAULT NULL,
+  `directus_files_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4
+;
