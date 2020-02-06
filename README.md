@@ -378,20 +378,38 @@ Log in with your *Directus Username and Password*. Once logged in, click on the 
 
 ![The Directus Collections & Fields Screen](./img/directus-collections-and-fields.png)
 
-We will need to configure the `artwork` and `event_log` collections. First, click on the `artwork` collection. You will need to modify the fields as follows:
+We will need to configure the `artwork` and `event_log` collections. First, click on the `artwork` collection, where you will see a list of fields from that collection. You will need to modify these fields so that they bind to their respective interfaces within Directus.
 
-- Within the `status` field, click on *Manage*. Then click on the field itself. Within the *Interface* tab, set its interface to *Status*.
+To bind a field to an interface, click on the *Manage* button next to the field, then click on the name of the field itself. Navigate to the *Interface* tab and select the appropriate interface for that field from the list. Once done, click *Save* in the dialog box.
 
-- Within the `created_by` field, click on *Manage*. Then click on the field itself. Within the *Interface* tab, set its interface to *Owner*.
+You will need to set the interface types for the following fields on the `artwork` collection. Note that you would only need to configure some of the fields, which are as follows:
 
-- Within the `created_on` field, click on *Manage*. Then click on the field itself. Within the *Interface* tab, set its interface to *Datetime Created*.
+| Field         | Interface          |
+| ------------- | ------------------ |
+| `status`      | *Status*           |
+| `created_by`  | *Owner*            |
+| `created_on`  | *DateTime Created* |
+| `modified_by` | *User Updated*     |
+| `modified_on` | *DateTime Updated* |
+| `image`       | *File*             |
+| `switch`      | *Switch*           I
 
-- Within the `modified_by` field, click on *Manage*. Then click on the field itself. Within the *Interface* tab, set its interface to *User Updated*.
+Once you are done, the *Fields Screen* for the `artwork` collection should look something like this:
 
-- Within the `modified_on` field, click on *Manage*. Then click on the field itself. Within the *Interface* tab, set its interface to *Datetime Updated*.
+![Configured Fields Screen for the Artwork Collection](./img/directus-configured-fields-screen-for-artwork-collection.png)
 
-- Within the `image` field, click on *Manage*. Then click on the field itself. Within the *Interface* tab, set its interface to *File*.
+You will also need to navigate back to the *Collections & Fields* screen and configure the interfaces for the `event_log` collection. Adjust the following field so that it binds to its respective interface:
+
+| Field         | Interface          |
+| ------------- | ------------------ |
+| `created_on`  | *DateTime Created* |
+
+Once your done setting up these fields, you should see the two collections *Artwork* and *Event Log* displayed on the top-left column of the screen. If you click on the *Artwork* collection, can 'create' a new story by clicking on
+the '+' sign in the top-right corner of the screen.
 
 ![An Empty List of Artworks in Directus](./img/directus-empty-artworks-add-new.png)
 
-// TODO: Setup Directus Thumbnailing
+Here, you can edit or edit basic information about an artwork, upload an image, and write a brief story about the artwork. The interface resembles that of a basic content management system, and you can customise and refine this screen further by going back into *Collections and Fields* screen.
+
+// TODO: Set Permissions
+// TODO: Configure Directus Extension

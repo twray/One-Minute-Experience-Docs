@@ -16,7 +16,7 @@ CREATE TABLE `artwork` (
   `image` int(10) unsigned DEFAULT NULL COMMENT 'A high resolution, digitised copy of the artwork, or a high quality photo of the artwork as on display. The photo should be taken directly facing the artwork, with no flash. The artwork should be entirely contained within the image, and it should occupy most or all of the image.',
   `image_recognition_tag_id` varchar(200) DEFAULT NULL COMMENT 'An internal tag ID that is used to help recognise this artwork. ',
   `year` varchar(200) DEFAULT NULL,
-  `is_example` tinyint(3) unsigned DEFAULT NULL COMMENT 'Determines whether this artwork should be displayed as an example.',
+  `is_example` int(1) unsigned DEFAULT NULL COMMENT 'Determines whether this artwork should be displayed as an example.',
   `notes` text COMMENT 'Any useful notes about this object.',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=478 DEFAULT CHARSET=latin1
