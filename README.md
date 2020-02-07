@@ -261,7 +261,7 @@ As you can see, the core data schema for One Minute is very simple. It consists 
 
 Once you have loaded the schema, you are ready to move on to the next step, which is to install the Directus CMS 'on top' of the database.
 
-### Installing the Directus CMS
+### Installing and Configuring the Directus CMS
 
 The following is a brief walkthrough on how to install Directus on your own server. You can also follow [their own set up guide here](https://docs.directus.io/installation/git.html).
 
@@ -404,12 +404,87 @@ You will also need to navigate back to the *Collections & Fields* screen and con
 | ------------- | ------------------ |
 | `created_on`  | *DateTime Created* |
 
+![Configured Fields Screen for the Event Log Collection](./img/directus-configured-fields-screen-for-event-log-collection.png)
+
 Once your done setting up these fields, you should see the two collections *Artwork* and *Event Log* displayed on the top-left column of the screen. If you click on the *Artwork* collection, can 'create' a new story by clicking on
 the '+' sign in the top-right corner of the screen.
 
 ![An Empty List of Artworks in Directus](./img/directus-empty-artworks-add-new.png)
 
-Here, you can edit or edit basic information about an artwork, upload an image, and write a brief story about the artwork. The interface resembles that of a basic content management system, and you can customise and refine this screen further by going back into *Collections and Fields* screen.
+Here, you can add or edit basic information about an artwork, upload an image, and write a brief story about the artwork. The interface resembles that of a basic content management system, and you can customise and refine this screen further by going back into *Collections and Fields* screen.
 
-// TODO: Set Permissions
-// TODO: Configure Directus Extension
+The next thing we'll need to do is set the appropriate permissions so that the One Minute Story Editor and Visitor Apps can access these collections.
+
+- Click on the gear on the right hand side of the screen, then navigate to *Roles and Permissions*.
+
+- Navigate to the *Public* permissions page.
+
+- Click *Show Directus System Collections* to expand the list of collections.
+
+- Ensure that the *Artwork* collection has read permissions, the *Event Log* collection has create and read permissions, and the *Files* collection has read permissions as indicated by the figure below. When you set these permissions, set the level to *All*.
+
+- Ensure that you save your changes by clicking on the 'tick' icon in the top-right corner.
+
+![Required Public Permissions for Directus](./img/directus-public-permissions.png)
+
+### Installing and Configuring the One Minute Experience Extension
+
+For the final step in configuring Directus, we would need to install the [One Minute Experience Directus Extension](https://github.com/xmacex/OneMinuteExperienceApiV2).
+
+With this extension installed, artworks that are automatically added or edited to the Directus CMS are also sent to the Microsoft CustomVision API. In order to complete this step, you will need your CustomVision API keys on hand: the `keys.txt` file that you have created earlier.
+
+On your server, `cd` to `1me` Directus installation directory, then navigate to `public/extensions/custom/hooks` directory.
+
+```
+cd public/extensions/custom/hooks
+```
+
+Clone the [One Minute Experience Directus Extension](https://github.com/xmacex/OneMinuteExperienceApiV2) repository into a new directory called `OneMinuteExperienceApiV2`. Move its `src/hooks` directory the root of the `hooks` folder and rename it to `1me`. Delete the original `OneMinuteExperienceApiV2` directory.
+
+```
+
+git clone https://github.com/xmacex/OneMinuteExperienceApiV2.git OneMinuteExperienceApiV2
+
+mv OneMinuteExperienceApiV2/src/hooks ./1me
+
+rm -rf OneMinuteExperienceApiV2
+
+```
+
+If required, recursively set the permissions of the newly created `1me` directory to that of `www-data`.
+
+```
+sudo chown -R www-data:www-data 1me
+```
+
+Now we need to supply this extension the necessary API keys so that it can talk to the CustomVision API. First, `cd` to the `config` directory located within the Directus installation folder, and then create a new file called `ome.ini` and edit the file using your favourite editor (which in this example, is `nano`).
+
+```
+
+cd ../../../../config
+
+touch ome.ini
+
+sudo chown -R www-data:www-data ome.ini
+
+nano ome.ini
+
+```
+
+Add the following to your file, replacing the placeholders with your own CustomVision API keys. Ensure that the keys you supply to this file are kept in quotes.
+
+```
+
+[project]
+endpoint         = "[your-training-endpoint]"
+id               = "[your-project-id]"
+
+[training]
+key              = "[your-training-key]"
+
+[prediction]
+key              = "[your-prediction-key]"
+resource_id      = "[your-prediction-resource-id]"
+production_model = "production"
+
+```
