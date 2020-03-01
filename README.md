@@ -471,7 +471,7 @@ nano ome.ini
 
 ```
 
-Add the following to your file, replacing the placeholders with your own CustomVision API keys. Ensure that the keys you supply to this file are kept in quotes.
+Add the following to your file, replacing the placeholders with your own CustomVision API keys from your `keys.txt` file. Ensure that the keys you supply to this file are kept in quotes.
 
 ```
 
