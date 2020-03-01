@@ -439,7 +439,7 @@ On your server, `cd` to `1me` Directus installation directory, then navigate to 
 cd public/extensions/custom/hooks
 ```
 
-Clone the [One Minute Experience Directus Extension](https://github.com/xmacex/OneMinuteExperienceApiV2) repository into a new directory called `OneMinuteExperienceApiV2`. Move its `src/hooks` directory the root of the `hooks` folder and rename it to `1me`. Delete the original `OneMinuteExperienceApiV2` directory.
+Clone the [One Minute Experience Directus Extension](https://github.com/xmacex/OneMinuteExperienceApiV2) repository into a new directory called `OneMinuteExperienceApiV2`. Move its `src/hooks` directory the root of the `hooks` folder and rename it to `1me`. Delete the original `OneMinuteExperienceApiV2` directory. Use `sudo` as required.
 
 ```
 
@@ -457,7 +457,7 @@ If required, recursively set the permissions of the newly created `1me` director
 sudo chown -R www-data:www-data 1me
 ```
 
-Now we need to supply this extension the necessary API keys so that it can talk to the CustomVision API. First, `cd` to the `config` directory located within the Directus installation folder, and then create a new file called `ome.ini` and edit the file using your favourite editor (which in this example, is `nano`).
+Now we need to supply this extension the necessary API keys so that it can talk to the CustomVision API. First, `cd` to the `config` directory located within the Directus installation folder, and then create a new file called `ome.ini` and edit the file using your favourite editor (which in this example, is `nano`). Use `sudo` as required.
 
 ```
 
