@@ -7,7 +7,7 @@ The One Minute Experience allows visitors to read bite-sized stories about the o
 The One Minute project consists of four parts.
 
 - [The One Minute Experience Mobile App](https://github.com/twray/One-Minute-Experience-Mobile-App).
-- [The One Minute Experience Story Editor](https://github.com/twray/One-Minute-Experience-Story-Editor)
+- [The One Minute Experience Story Editor](https://github.com/twray/One-Minute-Experience-Story-Editor).
 - A web server running the [Directus Headless CMS](https://directus.io/) with the [One Minute Experience Extension](https://github.com/xmacex/OneMinuteExperienceApiV2) installed.
 - A [Microsoft Azure CustomVision Account](https://www.customvision.ai/) with an active Multi-class Classification project, with active API keys for both training and prediction.
 
@@ -265,7 +265,7 @@ Once you have loaded the schema, you are ready to move on to the next step, whic
 
 The following is a brief walkthrough on how to install Directus on your own server. You can also follow [their own set up guide here](https://docs.directus.io/installation/git.html).
 
-First, create and navigate to a public URL which will host our Directus installation.
+First, create and navigate to a public Web directory that will host our Directus installation.
 
 ```
 
@@ -344,19 +344,21 @@ sudo chown -R www-data:www-data .
 
 ```
 
-With the server configuration of the way, you can navigate to your Web browser, pointing the URL to the server and its path as defined in your Apache configuration.
+With the server configuration of the way, you can navigate to your Web browser, pointing the URL to the server and its path as defined in your Apache configuration. This is your *Directus URL*, and take note of it. You will use this URL to set up and log into the Directus CMS.
 
 ```
 http://[your-server-here]/1me/
 ```
 
-If all is successful, it should direct you to the Directus installation screen.
+If all is successful, following the *Directus URL* should direct you to the Directus installation screen.
 
 ![The Initial Directus Installation Screen](./img/directus-setup-screen.png)
 
 Follow the prompts until you create the *Create Project* screen. Here, you would need to enter a *Project Name* (such as `One Minute`, although you could use any other name you would like). The *Project Key* will automatically populate. Enter your e-mail address and a password that you will use to log into the Directus CMS as an administrator. Note that this is different from your MySQL username and password.
 
 ![The Directus Create Project Screen](./img/directus-create-project-screen.png)
+
+Take note of the *Project Key* (which in this case, is called `one-minute`). Save this information in a text file, as you will need it for later when we set up and configure the One Minute [Story Editor](https://github.com/twray/One-Minute-Experience-Story-Editor) and [Mobile App](https://github.com/twray/One-Minute-Experience-Mobile-App).
 
 On the next screen, you will need to enter your database details as noted before:
 
@@ -487,4 +489,77 @@ key              = "[your-prediction-key]"
 resource_id      = "[your-prediction-resource-id]"
 production_model = "production"
 
+```
+
+## Set Up and Configure The One Minute Experience Story Editor
+
+The [The One Minute Experience Story Editor](https://github.com/twray/One-Minute-Experience-Story-Editor) interacts with the Directus CMS to create and edit stories for the [The One Minute Experience Mobile App](https://github.com/twray/One-Minute-Experience-Mobile-App). The following steps will explain how to set up, configure and customise the Story Editor, and how to manage user accounts for the tool.
+
+Like the Directus CMS, the One Minute Story Editor tool is hosted on your own server. Some of the steps that were required to set up the Directus CMS, such as Apache configuration, will be again repeated for the Story Editor tool.
+
+## Installing and Configuring the Story Editor
+
+First, create and navigate to a public Web directory that will host our Story Editor.
+
+```
+
+mkdir /var/www/1me-story-editor
+
+cd /var/www/1me-story-editor
+
+```
+
+Then, clone the [Story Editor repository](https://github.com/twray/One-Minute-Experience-Story-Editor) into this directory.
+
+```
+git clone https://github.com/twray/One-Minute-Experience-Story-Editor.git .
+```
+
+The Story Editor communicates with the Directus CMS via its API. Thus, we would need to supply the Story Editor with the *API Endpoint* of the Directus installation.
+
+How do we find the API Endpoint? We would first need to go back to [a previous step](#installing-and-configuring-the-directus-cms) and obtain two things that we noted down earlier:
+
+- A *Directus URL*: this is the URL that you would use to log into the Directus CMS, and is the URL that points to the directory in which you have installed the Directus CMS.
+
+- A *Project Key*: this project key was set up for you when you installed the Directus CMS, and is based on the *project name* that you have entered when you were setting up Directus. If you have given the project name of 'One Minute' (which is the recommended project name as indicated in this guide), then your *project key* would be `one-minute`.
+
+We can get our API endpoint by combining our *Directus URL* with the *Project Key*, which in this case, would look like the following:
+
+```
+http://[your-server-here]/1me/one-minute
+```
+
+We can confirm the API Endpoint by copying it into our Web Browser. If this API Endpoint is valid, our Web Browser will return information about the Directus project, which will look something like this:
+
+```
+
+{
+  "api": {
+    "version": "8.5.4",
+    "requires2FA": false,
+    "database": "mysql",
+    "project_logo": null,
+    "project_color": "#263238",
+    "project_foreground": null,
+    "project_background": null,
+    "project_public_note": null,
+    "default_locale": null,
+    "telemetry": true,
+    "project_name": "One Minute"
+  },
+  "server": {
+    "max_upload_size": 134217728,
+    "general": {
+      "php_version": "7.2.24-0ubuntu0.18.04.1",
+      "php_api": "apache2handler"
+    }
+  }
+}
+
+```
+
+Now that we have the *API Endpoint*, we can configure the Story Editor. Within newly created directory of the Story Editor project, create a copy of the configuration file - `config-sample.tsx` and call it `config.tsx`.
+
+```
+cp src/config/config-sample.tsx src/config/config.tsx
 ```
