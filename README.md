@@ -497,7 +497,7 @@ The [The One Minute Experience Story Editor](https://github.com/twray/One-Minute
 
 Like the Directus CMS, the One Minute Story Editor tool is hosted on your own server. Some of the steps that were required to set up the Directus CMS, such as Apache configuration, will be again repeated for the Story Editor tool.
 
-## Installing and Configuring the Story Editor
+### Installing and Configuring the Story Editor
 
 First, create and navigate to a public Web directory that will host our Story Editor.
 
@@ -523,13 +523,13 @@ How do we find the API Endpoint? We would first need to go back to [a previous s
 
 - A *Project Key*: this project key was set up for you when you installed the Directus CMS, and is based on the *project name* that you have entered when you were setting up Directus. If you have given the project name of 'One Minute' (which is the recommended project name as indicated in this guide), then your *project key* would be `one-minute`.
 
-We can get our API endpoint by combining our *Directus URL* with the *Project Key*, which in this case, would look like the following:
+We can get our *API Endpoint* by combining our *Directus URL* with the *Project Key*, which in this case, would look like the following:
 
 ```
 http://[your-server-here]/1me/one-minute
 ```
 
-We can confirm the API Endpoint by copying it into our Web Browser. If this API Endpoint is valid, our Web Browser will return information about the Directus project, which will look something like this:
+We can confirm the API Endpoint by adding a trailing slash `/` and copying it into our Web Browser (so that our example would appear as `http://[your-server-here]/1me/one-minute/`). If this API Endpoint is valid, our Web Browser will return information about the Directus project, which will look something like this:
 
 ```
 
@@ -558,8 +558,151 @@ We can confirm the API Endpoint by copying it into our Web Browser. If this API 
 
 ```
 
-Now that we have the *API Endpoint*, we can configure the Story Editor. Within newly created directory of the Story Editor project, create a copy of the configuration file - `config-sample.tsx` and call it `config.tsx`.
+Now that we have the *API Endpoint*, we can configure the Story Editor. Within the root directory of the Story Editor project, create a copy of the configuration file - `config-sample.tsx` and call it `config.tsx`.
 
 ```
 cp src/config/config-sample.tsx src/config/config.tsx
 ```
+
+Then open up this file in your favourite text editor:
+
+```
+nano src/config/config.tsx
+```
+
+Within this file, you will see various configuration options that can be used to customise the Story Editor. For now, we'll just take a look at the first few lines:
+
+```
+
+import React from 'react';
+
+import AppConfiguration from '../model/AppConfiguration';
+
+const config: AppConfiguration = {
+  serverAPIRoot: "[SERVER_API_ROOT]",
+  serverDBTable: "artwork",
+  autoLoginPassword: false,
+  ...
+
+```
+
+In the above file, we will be setting the `serverAPIRoot` option, so we will replace `[SERVER_API_ROOT]` with our *API Endpoint*. There are other options here that you can use to alter the branding and dialogue of the Story Editor, but we can look at these later. Once done, save and exit the editor.
+
+Next up, we will need to configure the *Public URL* of the project so that the project can build correctly. Within the root directory of the Story Editor, create a file that will store our global environment variables called `.env`. Open this file within your favourite editor:
+
+```
+
+touch .env
+
+nano .env
+
+```
+
+Within this file, add an environment variable called `PUBLIC_URL` which corresponds to the name of the directory that contains the Story Editor, which in our case is called `1me-story-editor`.
+
+```
+PUBLIC_URL=/1me-story-editor/
+```
+
+Once done, we will need to build and deploy the Story Editor. Within the directory of the Story Editor, run the following:
+
+```
+
+npm install
+
+npm run build
+
+```
+
+Once the project builds, we will need to complete one more step, which is to configure Apache to publicly enable and display the Story Editor tool. Navigate to your Apache folder, which in most server configurations is `/etc/apache2`:
+
+```
+cd /etc/apache2
+```
+
+Navigate to the `sites-available` folder, and create a new file called `1me-story-editor.conf`. Open this file in your favourite editor.
+
+```
+
+cd sites-available
+
+touch 1me-story-editor.conf
+
+nano 1me-story-editor.conf
+
+```
+
+Add the following to the `1me-story-editor.conf` file:
+
+```
+
+Alias "/1me-story-editor" "/var/www/1me-story-editor/build"
+
+<Directory /var/www/1me-story-editor/build>
+        Require all granted
+        AllowOverride All
+</Directory>
+
+```
+
+Now `cd` back into the `sites-enabled` directory, and create a symlink to the `1me.conf` file in your `sites-available` directory.
+
+```
+
+cd ../sites-enabled/
+
+ln -s ../sites-available/1me-story-editor.conf ./1me-story-editor.conf
+
+```
+
+Once done, restart the Apache server.
+
+```
+apache2ctl restart
+```
+
+Does this step look familiar? We are configuring Apache to set up a virtual directory called `1me-story-editor` that points directly to the `build` folder of the Story Editor project, which is `/var/www/1me-story-editor/build`, just as we have done for the `public` folder of the Directus project.
+
+Once done, navigate to the URL that corresponds to the Apache virtual directory, and you should be presented with the log-in screen of the Story Editor.
+
+![The Log-in Screen of the Story Editor](./img/story-editor-login-screen.png)
+
+At this log-in screen, you can use the same username and password that you would have used to log into Directus. You should now be able to use the story editor to add, edit and remove stories.
+
+### Adding and Removing Additional Users
+
+You can also set up and create user accounts for the Story Editor. For example, you may wish to hold a workshop where participants can create their own stories based on the artworks that they see within the museum. For this, they can log in with their own username and password.
+
+User management is done via the Directus back-end. Log in to Directus using the *Directus URL*, and then click on the *Users Icon* (the icon that looks like two people). Use this screen to add, edit or manage user accounts. To add a user, click on the 'plus' icon in the top-right corner of the screen.
+
+![The Directus User Management Screen](./img/directus-user-management-screen.png)
+
+When adding new users to the Story Editor, make sure you do the following:
+
+- Make sure you supply an e-mail address for the user, and that their role is set to 'Administrator'.
+
+- Make sure that you supply a password for the user.
+
+- Make sure their status is set to *Active*. If you would wish to disable a user's access to the story editor, you can set their status to *Suspended*.
+
+Once the user information is saved, they can immediately log in to the Story Editor.
+
+### Customising the Story Editor
+
+You can also edit the config file, located at `src/config/config.tsx` to further customise the story editor.
+
+- You can set an `autoLoginPassword`. If this value is set to `false`, then users are required to enter a password to access the story editor. However, you can set up user accounts so that they have a pre-defined password as saved within the Directus CMS, and the system will automatically log the user in using the password set in `autoLoginPassword`. If the `autoLoginPassword` is set, they only need to enter their e-mail address on the log-in screen.
+
+- You can customise the `branding` of the log-in screen:
+
+    - You can change the image used on the log-in screen by altering the filename as described by `loginScreenImageSrc` (which is located within the `public` folder.)
+
+    - You can set the value of `loginScreenImageSize` to set the size of the image on the log-in screen (`normal` or `large`).
+
+    - You can change the background colour of the log-in screen by changing the `loginScreenBackground` property.
+
+    - You can set the `loginScreenTheme` as either `dark` (light text on dark background) or `light` (dark text on light background).
+
+- You can customise the `dialog` of the `storyPrompts`. These are the prompts that visitors see when they write stories within the Story Editor. We recommend that you use the dialog that is already supplied as a default, as these story prompts are been based on research that supports how museum visitors can write stories based on the objects they see within the museum. However, you can adjust these `storyPrompts` if you feel that doing so would suit the specific purpose of your collection, or if you would wish to translate these prompts to match the native language of your visitors.
+
+- You can customise the `dialog` of the `introScreen` as it appears on both desktop and mobile versions of the story editor. Note that the dialog may differ somewhat on a desktop or mobile device: for example, a visitor using the Story Editor on a desktop device may have access to digitised images of the collection, whereas a visitor using the Story Editor on their phone may be standing in front of the objects.
