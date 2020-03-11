@@ -706,3 +706,133 @@ You can also edit the config file, located at `src/config/config.tsx` to further
 - You can customise the `dialog` of the `storyPrompts`. These are the prompts that visitors see when they write stories within the Story Editor. We recommend that you use the dialog that is already supplied as a default, as these story prompts are been based on research that supports how museum visitors can write stories based on the objects they see within the museum. However, you can adjust these `storyPrompts` if you feel that doing so would suit the specific purpose of your collection, or if you would wish to translate these prompts to match the native language of your visitors.
 
 - You can customise the `dialog` of the `introScreen` as it appears on both desktop and mobile versions of the story editor. Note that the dialog may differ somewhat on a desktop or mobile device: for example, a visitor using the Story Editor on a desktop device may have access to digitised images of the collection, whereas a visitor using the Story Editor on their phone may be standing in front of the objects.
+
+
+## Set Up and Deploy the One Minute Visitor App
+
+The One Minute Visitor App provides the *visitor experience* for One Minute. The app is a React Native project that can be customised for your museum, and deployed on the iOS and Android App Store. While the One Minute Visitor App provides the basic "shell" of the app, it is up to the museum to customise and deploy the app as you see fit.
+
+Before you continue with this step, you will need to make sure that:
+
+- You or your museum has an account on the iOS App Store and/or Google Play store, and that you have permission to publish apps to that account.
+
+- A clear on idea how to market and provide supplementary materials for this app, including any explanatory text on the app store or website.
+
+- An understanding that it can take some time -- in some cases up to a week -- for the app to be available on the app store once it is published, and that your app may be conditionally published subject to an approval process.
+
+In order to complete the next steps, you will need access to a computer with an appropriate development environment setup in order to run and edit React Native projects. Namely, you would need to have [Node JS](https://nodejs.org/en/) installed with a [suitable text editor](https://atom.io/).
+
+### Configuring the Visitor App
+
+First, create and navigate to a public directory that will host the Visitor App.
+
+```
+
+mkdir 1me-visitor-app
+
+cd 1me-visitor-app
+
+```
+
+Then, clone the [Visitor App repository](https://github.com/twray/One-Minute-Experience-Mobile-App.git) into this directory.
+
+```
+git clone https://github.com/twray/One-Minute-Experience-Mobile-App.git .
+```
+
+Install the dependencies of this project by running `npm install`.
+
+```
+npm install
+```
+
+Next up, we would need to configure the Visitor App. Create a copy of the configuration file - `config-sample.tsx` and call it `config.tsx`.
+
+```
+cp src/config/config-sample.tsx src/config/config.tsx
+```
+
+Now, open up this file in your favourite editor:
+
+
+Then open up this file in your favourite text editor:
+
+```
+nano src/config/config.tsx
+```
+
+Like the Story Editor, we'll also need to configure this file so we can connect the Visitor App to the Directus CMS and the CustomVision API. Observe the following empty fields within the `config.tsx` file:
+
+```
+
+const config: AppConfiguration = {
+  serverRoot: "[SERVER_ROOT]",
+  serverAPIRoot: "[SERVER_API_ROOT]",
+  serverDBTable: "artwork",
+  customVision: {
+    projectID: "[PROJECT_ID]",
+    predictionKey: "[PREDICTION_KEY]",
+    predictionEndpoint: "[PREDICTION_ENDPOINT]",
+    predictionConfidenceThreshold: 0.9,
+    iteration: "production"
+  },
+  dialog: {
+  ...
+
+```
+
+The `[SERVER_API_ROOT]` refers to the *API Endpoint* that we have [defined in a previous step](installing-and-configuring-the-story-editor). It is the same URL that you would have used when you have supplied the *API Endpoint* for the Story Editor. If you have used the path and URL names as described within this guide, the *API Endpoint* might look something like this:
+
+```
+http://[your-server-here]/1me/one-minute
+```
+
+The `[SERVER_ROOT]` is the *API Endpoint*, but without the *project key*. In following the same naming convention we have used as this guide, it might look something like this:
+
+```
+http://[your-server-here]/1me
+```
+
+In some cases, this would be the same as your *Directus URL*.
+
+For the remaining configuration options: `[PROJECT_ID]`, `[PREDICTION_KEY]` and `[PREDICTION_ENDPOINT]`, we would need to go back to our `keys.txt` from our [CustomVision Project](Create our CustomVision Project) and copy and paste the relevant keys into these fields.
+
+### Building and Testing the Visitor App
+
+Once we have configured the app, we can now build and test it. Install the project dependencies of the app by running:
+
+```
+npm install
+```
+
+Then run the app by running:
+
+```
+npm start
+```
+
+The Visitor App uses the [Expo Workflow](https://expo.io/) to test, run and deploy the app. If you haven't used or run expo before, you may be asked to download and install the dependencies. In same cases, you may need to install it using `sudo`:
+
+```
+sudo npm install -g expo-cli
+```
+
+For more information about the Expo workflow, you can also check out their [documentation](https://expo.io/).
+
+Once the app is built and up and running, you can test the app on your phone. Download the Expo Client App for [iOS](https://apps.apple.com/us/app/expo-client/id982107779) [Google Play](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=en) and scan the barcode that appears in your Web browser.
+
+The app should compile and run on your phone. To test the app, upload an image into the story editor and scan it with the app. The artwork's story should appear on screen, and any changes that you make to the story should update within the app in real time.
+
+### Customising the Visitor App
+
+You can further customise the Visitor App by making changes to its configuration `config.tsx` file.
+
+- You can adjust the `dialog` of both the `introCards` -- the cards that first appear on screen when you open the app, and the `infoScreen`, the screen that appears when you press the little 'i' button in the top-right corner of the screen.
+
+- You can also adjust the `predictionConfidenceThreshold`, a value between `0` and `1` that determines how "confident" the prediction should be. A higher value indicate that the app needs to be more "certain" in order to make a prediction. If your visitors are having trouble scanning the images, try and adjust this value so it is lower, although you may end up with false positives in that case.
+
+- You can also customise the logo and branding of the app's icon and launch image by modifying the image files within the `/assets` folder.
+
+### Deploying the App to the App Store
+
+- In order to deploy the visitor app to the app store, you would need to have set up an Apple Developer and/or Google Play account. The process can take up to two weeks. Expo provides [extensive documentation](https://docs.expo.io/versions/latest/distribution/app-stores/) on how to prepare and set up your app for deployment. Please follow those guides for information and guidance on how to deploy to these stores.
